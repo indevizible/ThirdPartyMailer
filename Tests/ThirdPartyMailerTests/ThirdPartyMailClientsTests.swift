@@ -20,7 +20,7 @@ class ThirdPartyMailClientsTests: XCTestCase {
     }
 
     func testClientAvailability() {
-        let client = ThirdPartyMailClient(name: "", URLScheme: "qwerty", URLRoot: nil, URLRecipientKey: nil, URLSubjectKey: nil, URLBodyKey: nil)
+        let client = ThirdPartyMailClient(name: "", URLScheme: "qwerty", URLRoot: nil, URLRecipientKey: nil, URLCCKey: nil, URLBCCKey: nil, URLSubjectKey: nil, URLBodyKey: nil)
 
         application.canOpenNextURL = true
 

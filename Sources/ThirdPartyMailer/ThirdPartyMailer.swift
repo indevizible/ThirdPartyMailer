@@ -68,8 +68,8 @@ open class ThirdPartyMailer {
 
      - Returns: `true` if the application opens the client; otherwise, `false`.
      */
-    open class func application(_ application: UIApplicationOpenURLProtocol, openMailClient client: ThirdPartyMailClient, recipient: String?, subject: String?, body: String?) -> Bool {
-        return application.openURL(client.composeURL(recipient, subject: subject, body: body))
+    open class func application(_ application: UIApplicationOpenURLProtocol, openMailClient client: ThirdPartyMailClient, recipient: String?, cc: String? = nil, bcc: String? = nil, subject: String?, body: String?) -> Bool {
+        return application.openURL(client.composeURL(recipient, cc: cc, bcc: bcc, subject: subject, body: body))
     }
 }
 

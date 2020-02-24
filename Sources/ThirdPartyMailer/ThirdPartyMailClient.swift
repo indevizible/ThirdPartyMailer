@@ -37,6 +37,12 @@ public struct ThirdPartyMailClient {
 
     /// The URL query items key for the recipient.
     let URLRecipientKey: String?
+    
+    /// The URL query items key for the cc.
+    let URLCCKey: String?
+    
+    /// The URL query items key for the bcc.
+    let URLBCCKey: String?
 
     /**
      The URL query items key for the subject, or `nil` if this client doesn’t support setting the subject.
@@ -56,28 +62,28 @@ public struct ThirdPartyMailClient {
     public static func clients() -> [ThirdPartyMailClient] {
         return [
             // sparrow:[to]?subject=[subject]&body=[body]
-            ThirdPartyMailClient(name: "Sparrow", URLScheme: "sparrow", URLRoot: nil, URLRecipientKey: nil, URLSubjectKey: "subject", URLBodyKey: "body"),
+            ThirdPartyMailClient(name: "Sparrow", URLScheme: "sparrow", URLRoot: nil, URLRecipientKey: nil, URLCCKey: "cc", URLBCCKey: "bcc", URLSubjectKey: "subject", URLBodyKey: "body"),
 
             // googlegmail:///co?to=[to]&subject=[subject]&body=[body]
-            ThirdPartyMailClient(name: "Gmail", URLScheme: "googlegmail", URLRoot: "///co", URLRecipientKey: "to", URLSubjectKey: "subject", URLBodyKey: "body"),
+            ThirdPartyMailClient(name: "Gmail", URLScheme: "googlegmail", URLRoot: "///co", URLRecipientKey: "to", URLCCKey: "cc", URLBCCKey: "bcc", URLSubjectKey: "subject", URLBodyKey: "body"),
 
             // x-dispatch:///compose?to=[to]&subject=[subject]&body=[body]
-            ThirdPartyMailClient(name: "Dispatch", URLScheme: "x-dispatch", URLRoot: "///compose", URLRecipientKey: "to", URLSubjectKey: "subject", URLBodyKey: "body"),
+            ThirdPartyMailClient(name: "Dispatch", URLScheme: "x-dispatch", URLRoot: "///compose", URLRecipientKey: "to", URLCCKey: "cc", URLBCCKey: "bcc", URLSubjectKey: "subject", URLBodyKey: "body"),
 
             // readdle-spark://compose?subject=[subject]&body=[body]&recipient=[recipient]
-            ThirdPartyMailClient(name: "Spark", URLScheme: "readdle-spark", URLRoot: "//compose", URLRecipientKey: "recipient", URLSubjectKey: "subject", URLBodyKey: "body"),
+            ThirdPartyMailClient(name: "Spark", URLScheme: "readdle-spark", URLRoot: "//compose", URLRecipientKey: "recipient", URLCCKey: "cc", URLBCCKey: "bcc", URLSubjectKey: "subject", URLBodyKey: "body"),
 
             // airmail://compose?subject=[subject]&from=[from]&to=[to]&cc=[cc]&bcc=[bcc]&plainBody=[plainBody]&htmlBody=[htmlBody]
-            ThirdPartyMailClient(name: "Airmail", URLScheme: "airmail", URLRoot: "//compose", URLRecipientKey: "to", URLSubjectKey: "subject", URLBodyKey: "plainBody"),
+            ThirdPartyMailClient(name: "Airmail", URLScheme: "airmail", URLRoot: "//compose", URLRecipientKey: "to", URLCCKey: "cc", URLBCCKey: "bcc", URLSubjectKey: "subject", URLBodyKey: "plainBody"),
 
             // ms-outlook://compose?subject=[subject]&body=[body]&to=[to]
-            ThirdPartyMailClient(name: "Microsoft Outlook", URLScheme: "ms-outlook", URLRoot: "//compose", URLRecipientKey: "to", URLSubjectKey: "subject", URLBodyKey: "body"),
+            ThirdPartyMailClient(name: "Microsoft Outlook", URLScheme: "ms-outlook", URLRoot: "//compose", URLRecipientKey: "to", URLCCKey: "cc", URLBCCKey: "bcc", URLSubjectKey: "subject", URLBodyKey: "body"),
 
             // ymail://mail/compose?subject=[subject]&body=[body]&to=[to]
-            ThirdPartyMailClient(name: "Yahoo Mail", URLScheme: "ymail", URLRoot: "//mail/compose", URLRecipientKey: "to", URLSubjectKey: "subject", URLBodyKey: "body"),
+            ThirdPartyMailClient(name: "Yahoo Mail", URLScheme: "ymail", URLRoot: "//mail/compose", URLRecipientKey: "to", URLCCKey: "cc", URLBCCKey: "bcc", URLSubjectKey: "subject", URLBodyKey: "body"),
 
             // fastmail://mail/compose?subject=[subject]&body=[body]&to=[to]
-            ThirdPartyMailClient(name: "Fastmail", URLScheme: "fastmail", URLRoot: "//mail/compose", URLRecipientKey: "to", URLSubjectKey: "subject", URLBodyKey: "body")
+            ThirdPartyMailClient(name: "Fastmail", URLScheme: "fastmail", URLRoot: "//mail/compose", URLRecipientKey: "to", URLCCKey: "cc", URLBCCKey: "bcc", URLSubjectKey: "subject", URLBodyKey: "body")
             ]
     }
 
@@ -90,7 +96,7 @@ public struct ThirdPartyMailClient {
 
      - Returns: A `URL` opening the mail client for the given parameters.
      */
-    public func composeURL(_ recipient: String?, subject: String?, body: String?) -> URL {
+    public func composeURL(_ recipient: String?, cc: String? = nil, bcc: String? = nil, subject: String?, body: String?) -> URL {
         var components = URLComponents(string: "\(URLScheme):\(URLRoot ?? "")")
         components?.scheme = self.URLScheme
 
@@ -104,6 +110,14 @@ public struct ThirdPartyMailClient {
 
         if let recipient = recipient, let URLRecipientKey = URLRecipientKey {
             queryItems.append(URLQueryItem(name: URLRecipientKey, value:recipient))
+        }
+        
+        if let cc = cc, let URLCCKey = URLCCKey {
+            queryItems.append(URLQueryItem(name: URLCCKey, value:cc))
+        }
+        
+        if let bcc = bcc, let URLBCCKey = URLBCCKey {
+            queryItems.append(URLQueryItem(name: URLBCCKey, value:bcc))
         }
 
         if let subject = subject, let URLSubjectKey = URLSubjectKey {

@@ -22,6 +22,7 @@
 	<string>1</string>
 	<key>LSApplicationQueriesSchemes</key>
 	<array>
+		<string>ms-outlook</string>
 		<string>sparrow</string>
 		<string>googlegmail</string>
 		<string>x-dispatch</string>
